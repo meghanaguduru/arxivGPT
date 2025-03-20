@@ -1,9 +1,7 @@
 import os
 import fitz as pymupdf # fitz is the PyMuPDF library older versions
 import re
-import nltk
-
-nltk.download('punkt')
+from sentence_transformers import SentenceTransformer
 
 class PDFTextExtractor:
     def __init__(self, input_dir= "../data/", output_dir="data/processed/"):
@@ -31,9 +29,19 @@ class PDFTextExtractor:
         return text
 
     # chunking should balance retrieval accuracy and computational efficiency
-    def chunk_text(self, text, chunk_size=524, stride=256):
-        sentences = nltk.sent_tokenize(text)
-        return sentences[0]
+    def chunk_text(self, text, chunk_size=512, overlap=50):
+        # basic chunking with overlap (fixed size)
+        # todo : explore semantic chunking
+        chunks = []
+        for i in range(0, len(text), chunk_size-overlap):
+            chunks.append(text[i: i+chunk_size])
+        return chunks
+    
+    def text_embeddings(self, chunks):
+        model_name = 'all-MiniLM-L6-v2' #22M param model, embeddings are 384 dim
+        model = SentenceTransformer(model_name)
+        embeddings = model.encode(chunks)
+        return embeddings
 
     def process_pdfs(self, pdf_dir):
         """
@@ -46,8 +54,12 @@ class PDFTextExtractor:
             # cleanup
             text = self.clean_text(text)
             # chunk text into sections
-            text = self.chunk_text(text)
-            print(text)
+            chunks = self.chunk_text(text)
+            print(len(chunks))
+            # get embeddings
+            # takes sometime, even though we use an ultrafast model
+            embeddings = self.text_embeddings(chunks)
+            print(embeddings.shape)
             # save to output_dir
         
 
