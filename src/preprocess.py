@@ -2,6 +2,7 @@ import os
 import fitz as pymupdf # fitz is the PyMuPDF library older versions
 import re
 from sentence_transformers import SentenceTransformer
+import numpy as np
 
 class PDFTextExtractor:
     def __init__(self, input_dir= "../data/", output_dir="data/processed/"):
@@ -38,7 +39,7 @@ class PDFTextExtractor:
         return chunks
     
     def text_embeddings(self, chunks):
-        model_name = 'all-MiniLM-L6-v2' #22M param model, embeddings are 384 dim
+        model_name = 'all-MiniLM-L6-v2' #22M param sentence embedding model, embeddings are 384 dim
         model = SentenceTransformer(model_name)
         embeddings = model.encode(chunks)
         return embeddings
@@ -61,8 +62,4 @@ class PDFTextExtractor:
             embeddings = self.text_embeddings(chunks)
             print(embeddings.shape)
             # save to output_dir
-        
-
-if __name__ == "__main__":
-    pdf_extractor = PDFTextExtractor("../data")
-    pdf_extractor.process_pdfs(pdf_extractor.input_dir)
+        return np.array(embeddings)
