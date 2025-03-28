@@ -30,7 +30,7 @@ class PDFTextExtractor:
         return text
 
     # chunking should balance retrieval accuracy and computational efficiency
-    def chunk_text(self, text, chunk_size=512, overlap=50):
+    def chunk_text(self, text, chunk_size=256, overlap=30):
         # basic chunking with overlap (fixed size)
         # todo : explore semantic chunking
         chunks = []
@@ -49,6 +49,7 @@ class PDFTextExtractor:
         Extract text from all PDFs in a directory and save as .txt files
         """
         pdf_files = [f for f in os.listdir(pdf_dir) if f.endswith(".pdf")]
+        all_embeddings = [] # Collect all embeddings
         for pdf_file in pdf_files:
             pdf_path = os.path.join(pdf_dir, pdf_file)
             text = self.extract_text(pdf_path)
@@ -60,6 +61,8 @@ class PDFTextExtractor:
             # get embeddings
             # takes sometime, even though we use an ultrafast model
             embeddings = self.text_embeddings(chunks)
-            print(embeddings.shape)
+            all_embeddings.append(embeddings)
             # save to output_dir
-        return np.array(embeddings)
+        all_embeddings = np.vstack(all_embeddings)
+        print(f"Final embeddings shape {all_embeddings.shape}")
+        return np.array(all_embeddings)
