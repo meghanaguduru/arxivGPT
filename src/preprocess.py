@@ -50,6 +50,7 @@ class PDFTextExtractor:
         """
         pdf_files = [f for f in os.listdir(pdf_dir) if f.endswith(".pdf")]
         all_embeddings = [] # Collect all embeddings
+        all_chunks = []
         for pdf_file in pdf_files:
             pdf_path = os.path.join(pdf_dir, pdf_file)
             text = self.extract_text(pdf_path)
@@ -57,6 +58,7 @@ class PDFTextExtractor:
             text = self.clean_text(text)
             # chunk text into sections
             chunks = self.chunk_text(text)
+            all_chunks.extend(chunks)
             print(len(chunks))
             # get embeddings
             # takes sometime, even though we use an ultrafast model
@@ -65,4 +67,5 @@ class PDFTextExtractor:
             # save to output_dir
         all_embeddings = np.vstack(all_embeddings)
         print(f"Final embeddings shape {all_embeddings.shape}")
-        return np.array(all_embeddings)
+        print(f"Total chunks : {len(all_chunks)}")
+        return all_chunks, np.array(all_embeddings)

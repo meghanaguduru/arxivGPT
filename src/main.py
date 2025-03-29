@@ -3,12 +3,13 @@ from vector_db import vectorDB
 import os
 
 embeddings_dim = 384 # hardcoded default (temp hack)
+sentences = None
 
 if __name__ == "__main__":
     vector_db_path = "../data/processed/first_vector_db.index"
     if not os.path.exists(vector_db_path):
         pdf_extractor = PDFTextExtractor("../data")
-        embeddings = pdf_extractor.process_pdfs(pdf_extractor.input_dir)
+        sentences, embeddings = pdf_extractor.process_pdfs(pdf_extractor.input_dir)
 
         embeddings_dim = embeddings.shape[1]
         print(f"Embeddings shape: {embeddings.shape}")
@@ -25,5 +26,10 @@ if __name__ == "__main__":
         print(vector_db.index.is_trained)
 
     # Retrieve similar documents
-    distances, indices = vector_db.retrieve("deep learning", 2)  
+    distances, indices = vector_db.retrieve("deep learning in nlp", 5)  
     print(f"Distances : {distances}, indices : {indices}")
+    if sentences : 
+        for index in indices[0]:
+            print(sentences[index]+" \n")
+    else:
+        print("No sentences stored in the database")
