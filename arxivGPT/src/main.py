@@ -1,6 +1,6 @@
 from preprocess import PDFTextExtractor
 from llm_inference import LLMModel
-from langchain.chains import create_retrieval_chain, LLMChain
+from langchain.chains import LLMChain
 from vector_db import vectorDB
 from vector_db_langchain import VectorDBLangchain
 from prompt_template import rag_prompt
@@ -40,9 +40,6 @@ if __name__ == "__main__":
     rag_chain = LLMChain(llm = llm.pipeline, prompt = rag_prompt)
     # Get answer from LLM
     response = rag_chain.invoke({"question": query, "context": context})
-    
-    # retrieval_chain = create_retrieval_chain(retriever, llm.pipeline)
-    # response = retrieval_chain.invoke({"input": query, "context": context})  
     
     print("Answer:", response)
   

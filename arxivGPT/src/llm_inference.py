@@ -1,7 +1,7 @@
 # Use Mistral-7B model via HuggingFace Transformers library
 
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
-from langchain_huggingface import HuggingFacePipeline
+from langchain.llms import HuggingFacePipeline
 
 
 class LLMModel:
