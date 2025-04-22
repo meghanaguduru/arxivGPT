@@ -2,7 +2,8 @@ from preprocess import PDFTextExtractor
 from llm_inference import LLMModel
 from vector_db import vectorDB
 from vector_db_langchain import VectorDBLangchain
-from prompt_template import rag_prompt
+# from prompt_template import rag_prompt
+from prompt_tuned import rag_prompt
 import os
 
 embeddings_dim = 384 # hardcoded default (temp hack)
@@ -28,14 +29,14 @@ if __name__ == "__main__":
     # Create a retrieval chain
     retriever = vector_db.get_retriever()
     # Query
-    query = "How do birds fly?"
+    query = "What are the biggest problems to solve in summarization?"
     docs_and_scores = vector_db.similarity_search_with_score(query)
 
     for doc, score in docs_and_scores:
         print("Score: ", score)
         print("Content : ", doc.page_content)
         
-    threshold = 0.5 # FAISS IndexFlatL2 scores -> the lower the score, closer the embedding
+    threshold = 0.9 # FAISS IndexFlatL2 scores -> the lower the score, closer the embedding
     filtered_docs = [doc for doc, score in docs_and_scores if score <= threshold]
     
     context = "\n".join([doc.page_content for doc in filtered_docs])
