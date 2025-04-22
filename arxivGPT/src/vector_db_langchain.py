@@ -22,7 +22,14 @@ class VectorDBLangchain:
     def load_db(self):
         # Load FAISS index
         self.db = FAISS.load_local(self.index_path, self.embedding_model, allow_dangerous_deserialization=True)
+        print(f"FAISS Index : {self.db.index}") # IndexFlatL2
         print(f"Loaded index with {self.db.index.ntotal} embeddings")
     
     def get_retriever(self):
         return self.db.as_retriever(search_type="similarity", search_kwargs={"k": 5})
+    
+    def similarity_search_with_score(self, query, k=5):
+        if self.db is None:
+            return ValueError("Database not loaded. Call load_db() first")
+        return self.db.similarity_search_with_score(query, k=k)
+    

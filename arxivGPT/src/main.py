@@ -28,14 +28,17 @@ if __name__ == "__main__":
     # Create a retrieval chain
     retriever = vector_db.get_retriever()
     # Query
-    query = "How is NLP used in bank marketing?"
-    docs = retriever.get_relevant_documents(query)
-    # print("Retrieved documents:", docs)
-    context = "\n".join([doc.page_content for doc in docs])
+    query = "How do birds fly?"
+    docs_and_scores = vector_db.similarity_search_with_score(query)
 
-    for doc in docs:
-        print("Document:", doc.page_content)
-        print("\n\n")
+    for doc, score in docs_and_scores:
+        print("Score: ", score)
+        print("Content : ", doc.page_content)
+        
+    threshold = 0.5 # FAISS IndexFlatL2 scores -> the lower the score, closer the embedding
+    filtered_docs = [doc for doc, score in docs_and_scores if score <= threshold]
+    
+    context = "\n".join([doc.page_content for doc in filtered_docs])
 
     rag_chain = rag_prompt | llm.pipeline
     # Get answer from LLM
