@@ -9,5 +9,14 @@ class LLMModel:
         self.model_name = model_name
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, use_fast=True)
         self.model = AutoModelForCausalLM.from_pretrained(self.model_name)
-        hf_pipeline = pipeline(task="text-generation",model=self.model, tokenizer=self.tokenizer)
+        hf_pipeline = pipeline(
+            task="text-generation",
+            model=self.model,
+            tokenizer=self.tokenizer,
+            max_new_tokens=100,
+            temperature=0.7,
+            do_sample=True,
+            top_p=0.95,
+            eos_token_id=self.tokenizer.eos_token_id    # <- Good practice to add this, End of Sequence token
+        )
         self.pipeline = HuggingFacePipeline(pipeline=hf_pipeline)

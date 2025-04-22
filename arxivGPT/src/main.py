@@ -28,17 +28,28 @@ if __name__ == "__main__":
     # Create a retrieval chain
     retriever = vector_db.get_retriever()
     # Query
-    query = "Explain transformer architecture"
+    query = "How is NLP used in bank marketing?"
     docs = retriever.get_relevant_documents(query)
-    print("Retrieved documents:", docs)
+    # print("Retrieved documents:", docs)
     context = "\n".join([doc.page_content for doc in docs])
 
     for doc in docs:
         print("Document:", doc.page_content)
+        print("\n\n")
 
     rag_chain = rag_prompt | llm.pipeline
     # Get answer from LLM
     response = rag_chain.invoke({"question": query, "context": context})
     
-    print("Answer:", response)
+    print("[RAG based Answer:]", response)
+    
+    # Raw LLM answer
+    raw_prompt = (
+        "You are an AI assistant answering questions.\n"
+        "Answer the following question briefly and accurately.\n"
+        f"Question: {query} \n"
+        "Answer: "
+    )
+    raw_response = llm.pipeline.invoke(raw_prompt)
+    print("[Raw LLM Answer:]", raw_response)
   
