@@ -2,8 +2,10 @@ from preprocess import PDFTextExtractor
 from llm_inference import LLMModel
 from vector_db import vectorDB
 from vector_db_langchain import VectorDBLangchain
-# from prompt_template import rag_prompt
-from prompt_tuned import rag_prompt
+# from prompts.prompt_template import prompt
+# from prompts.prompt_tuned import prompt
+# from prompts.prompt_fewshot import prompt
+from prompts.prompt_chainofthought import prompt
 import os
 
 embeddings_dim = 384 # hardcoded default (temp hack)
@@ -29,7 +31,8 @@ if __name__ == "__main__":
     # Create a retrieval chain
     retriever = vector_db.get_retriever()
     # Query
-    query = "What are the biggest problems to solve in summarization?"
+    # query = "What are the biggest problems to solve in summarization?"
+    query = "What is the main contribution of Deep Learning Models for Automatic Summarization paper?"
     docs_and_scores = vector_db.similarity_search_with_score(query)
 
     for doc, score in docs_and_scores:
@@ -41,7 +44,7 @@ if __name__ == "__main__":
     
     context = "\n".join([doc.page_content for doc in filtered_docs])
 
-    rag_chain = rag_prompt | llm.pipeline
+    rag_chain = prompt | llm.pipeline
     # Get answer from LLM
     response = rag_chain.invoke({"question": query, "context": context})
     

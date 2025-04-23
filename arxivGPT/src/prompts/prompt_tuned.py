@@ -1,7 +1,7 @@
 from langchain.prompts import PromptTemplate
 
 # Prompt tuning for a more refined answer
-rag_prompt = PromptTemplate(
+prompt = PromptTemplate(
     input_variables=["context", "question"],
     template=(
         "You are a highly skilled AI assistant with expertise in research papers. "
