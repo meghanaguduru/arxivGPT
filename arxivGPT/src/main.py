@@ -22,6 +22,7 @@ if __name__ == "__main__":
 
     pdf_extractor = PDFTextExtractor("../data")
     if not os.path.exists(vector_db_path):
+        print("Creating vector database..")
         sentences, embeddings = pdf_extractor.process_pdfs(pdf_extractor.input_dir)
         vector_db.create_db(embeddings, sentences)
     else:

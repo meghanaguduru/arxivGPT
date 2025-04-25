@@ -5,7 +5,7 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 
 class PDFTextExtractor:
-    def __init__(self, input_dir= "../data/", output_dir="data/processed/"):
+    def __init__(self, input_dir= "../data/input_papers", output_dir="../data/processed/"):
         self.input_dir = input_dir
         self.output_dir = output_dir
         os.makedirs(self.output_dir, exist_ok=True)
