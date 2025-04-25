@@ -51,6 +51,7 @@ class PDFTextExtractor:
         pdf_files = [f for f in os.listdir(pdf_dir) if f.endswith(".pdf")]
         all_embeddings = [] # Collect all embeddings
         all_chunks = []
+        # i = 0
         for pdf_file in pdf_files:
             pdf_path = os.path.join(pdf_dir, pdf_file)
             text = self.extract_text(pdf_path)
@@ -58,6 +59,10 @@ class PDFTextExtractor:
             text = self.clean_text(text)
             # chunk text into sections
             chunks = self.chunk_text(text)
+            # i = i + 1
+            # print("Printing all chunks to gen GT")
+            # print(f"count : {i}")
+            # print(f"Chunks : {chunks}")
             all_chunks.extend(chunks)
             print(len(chunks))
             # get embeddings

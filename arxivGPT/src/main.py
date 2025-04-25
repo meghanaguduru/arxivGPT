@@ -3,9 +3,9 @@ from llm_inference import LLMModel
 from vector_db import vectorDB
 from vector_db_langchain import VectorDBLangchain
 # from prompts.prompt_template import prompt
-# from prompts.prompt_tuned import prompt
+from prompts.prompt_tuned import prompt
 # from prompts.prompt_fewshot import prompt
-from prompts.prompt_chainofthought import prompt
+# from prompts.prompt_chainofthought import prompt
 import os
 
 embeddings_dim = 384 # hardcoded default (temp hack)
@@ -36,13 +36,13 @@ if __name__ == "__main__":
     docs_and_scores = vector_db.similarity_search_with_score(query)
 
     for doc, score in docs_and_scores:
-        print("Score: ", score)
-        print("Content : ", doc.page_content)
+        print(f"Score: {score}")
+        print(f"Content : \n {doc.page_content} \n")
         
     threshold = 0.9 # FAISS IndexFlatL2 scores -> the lower the score, closer the embedding
     filtered_docs = [doc for doc, score in docs_and_scores if score <= threshold]
     
-    context = "\n".join([doc.page_content for doc in filtered_docs])
+    context = "\n\n".join([doc.page_content for doc in filtered_docs])
 
     rag_chain = prompt | llm.pipeline
     # Get answer from LLM
