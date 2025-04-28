@@ -49,11 +49,11 @@ with jsonlines.open(output_path, mode='w') as writer:
             )
 
             # Get full QA text
-            qa_response = client.models.generate_content(                 #40B param model
-                model="gemini-2.0-flash", contents=qa_prompt 
-            )
-            print(qa_response.text)
-            # qa_response = llm.pipeline.invoke(qa_prompt)
+            # qa_response = client.models.generate_content(                 #40B param model
+            #     model="gemini-2.0-flash", contents=qa_prompt 
+            # )
+            # print(qa_response.text)
+            qa_response = llm.pipeline.invoke(qa_prompt)
 
             # Split into question and answer
             if "Answer:" in qa_response:
