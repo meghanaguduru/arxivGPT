@@ -1,0 +1,14 @@
+source ~/venvs/my_app_venv/bin/activate
+
+Run Application :
+
+
+
+Run evaluation : 
+
+
+
+Generate eval dataset :
+
+
+
