@@ -12,7 +12,7 @@ embeddings_dim = 384 # hardcoded default (temp hack)
 sentences = None
 
 if __name__ == "__main__":
-    vector_db_path = "../data/processed/first_vector_db"
+    vector_db_path = "../data/processed/paragraph_vector_db"
 
     # Initialize LLM
     # model_name = "mistralai/Mistral-7B-v0.1"
@@ -20,7 +20,7 @@ if __name__ == "__main__":
     llm = LLMModel(model_name=model_name)
     vector_db = VectorDBLangchain(embeddings_dim, index_path=vector_db_path)
 
-    pdf_extractor = PDFTextExtractor("../data")
+    pdf_extractor = PDFTextExtractor("../data/input_papers")
     if not os.path.exists(vector_db_path):
         print("Creating vector database..")
         sentences, embeddings = pdf_extractor.process_pdfs(pdf_extractor.input_dir)

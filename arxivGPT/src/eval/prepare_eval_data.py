@@ -85,7 +85,7 @@ with jsonlines.open(output_path, mode='w') as writer:
                 "answer": answer,
                 "ground_context": sentence
             })
-
+p
             print(f"[✓] Generated QA pair #{i + 1}")
         except Exception as e:
             print(f"[Error] QA generation failed for sentence #{i + 1}: {e}")
